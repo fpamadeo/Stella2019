@@ -31,10 +31,10 @@ Contributors:
 ********************************************************************************************************************************
 Guidelines:
 
-	*Update the readme whenever necessary
+*Update the readme whenever necessary
 
-	*Give a reasonable message whenever you push something (e.g. "Fixed bug on controllers" would suffice)
+*Give a reasonable message whenever you push something (e.g. "Fixed bug on controllers" would suffice)
 
-	*If used any libraries not included in vanilla Arduino IDE or referenced an already existing code, update the sources.txt file
+*If used any libraries not included in vanilla Arduino IDE or referenced an already existing code, update the sources.txt file
 ********************************************************************************************************************************
 ASCII design was made in http://patorjk.com/software/taag/#p=display&f=Slant&t=
