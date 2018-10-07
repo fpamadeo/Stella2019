@@ -16,22 +16,22 @@
                           
 
 This is a git repository for Chicago EDT's Project Stella 2019
-**********************************************************************************************************************************
+********************************************************************************************************************************
 This repository includes:
 	-The controller's code, design and components
 	-The receiver and how it interacts with the controller, motor drivers/controllers, and other mechanisms
 	-Mechanisms' codes, design and components
-**********************************************************************************************************************************
+********************************************************************************************************************************
 Contributors:
 	-Francis Paul Amadeo
 	-
 	-
 	-
 	-
-**********************************************************************************************************************************
+********************************************************************************************************************************
 "Guidelines"
 *Update the readme whenever necessary
 *Give a reasonable message whenever you push something (e.g. "Fixed bug on controllers" would suffice")
 *If used any libraries not included in vanilla Arduino IDE or referenced an already existing code, update the sources.txt file
-**********************************************************************************************************************************
+********************************************************************************************************************************
 ASCII design was made in http://patorjk.com/software/taag/#p=display&f=Slant&t=
