@@ -1,6 +1,9 @@
 /*
  Short Description:
- Takes the 
+ Takes the analog (x- and y-axises) and digital (switch) data and converting it to a -100 to 100 for analog, 
+ and 1/0 for the digital. 
+
+ For representation: this outputs it to the serial monitor and to LEDs
  */
 
 // Arduino pin numbers
