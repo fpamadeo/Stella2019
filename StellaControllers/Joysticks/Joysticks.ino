@@ -1,4 +1,7 @@
-
+/*
+ Short Description:
+ Takes the 
+ */
 
 // Arduino pin numbers
 // Left Analog Stick
@@ -89,7 +92,7 @@ void loop() {
   }
 
   //Powering Up LEDs
-  //X-axises
+  //X-axises - Powers up the corresponding LEDs by how hard you move the joysticks
   if (xaxL < 0){
     analogWrite(leftL, xaxL * -2.55);  
   }
@@ -103,7 +106,7 @@ void loop() {
     analogWrite(rightR, xaxR * 2.55);  
   }
 
-  //Y-axises
+  //Y-axises - Powers up the corresponding LEDs by how hard you move the joysticks
   if (yaxL < 0){
     analogWrite(downL, yaxL * -2.55);  
   }
@@ -115,6 +118,21 @@ void loop() {
   }
   else{
     analogWrite(upR, yaxR * 2.55);  
+  }
+
+  //Switches - Powers up all (L/R) the LEDs when pressed
+  if(switchL == 0){
+    analogWrite(downL, 255);
+    analogWrite(upL, 255);
+    analogWrite(leftL, 255);
+    analogWrite(rightL, 255);
+  }
+  
+  if(switchR == 0){
+    analogWrite(downR, 255);
+    analogWrite(upR, 255);
+    analogWrite(leftR, 255);
+    analogWrite(rightR, 255);
   }
   /*
   //Serial Monitor printing (for debug/testing)
