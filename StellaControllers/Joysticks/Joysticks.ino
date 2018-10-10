@@ -6,32 +6,33 @@
  For representation: this outputs it to the serial monitor and to LEDs
  */
 
+bool returnToZero = true;
 // Arduino pin numbers
 // Left Analog Stick
 const int leftSW_pin = 2;  // digital pin connected to Left switch output //0 if pressed and 1 if not
-const int leftX_pin = A0;  // analog pin connected to Left X output //Left: 0; Mid:~492; Right:~1008
-const int leftY_pin = A1;  // analog pin connected to Left Y output //down: 0; Mid:~503; Up:~1006
+const int leftX_pin = A2;  // analog pin connected to Left X output //Left: 0; Mid:~492; Right:~1008
+const int leftY_pin = A3;  // analog pin connected to Left Y output //down: 0; Mid:~503; Up:~1006
 // Right Analog Stick
 const int rightSW_pin = 3; // digital pin connected to Right switch output //0 if pressed and 1 if not
-const int rightX_pin = A2; // analog pin connected to Right X output //Left: 0; Mid:~492; Right:~1010 
-const int rightY_pin = A3; // analog pin connected to Right Y output //down: 0; Mid:~510; Up:~1019
+const int rightX_pin = A0; // analog pin connected to Right X output //Left: 0; Mid:~492; Right:~1010 
+const int rightY_pin = A1; // analog pin connected to Right Y output //down: 0; Mid:~510; Up:~1019
 // LED pin numbers
-const int upL = 11;        //LED representing pos y axis
-const int leftL = 10;      //LED representing neg x axis
-const int downL = 9;       //LED representing neg y axis
-const int rightL = 8;      //LED representing pos x axis
+const int upR = 11;        //LED representing pos y axis
+const int leftR = 10;      //LED representing neg x axis
+const int downR = 9;       //LED representing neg y axis
+const int rightR = 8;      //LED representing pos x axis
 
-const int upR = 7;         //LED representing pos y axis
-const int leftR = 6;       //LED representing neg x axis
-const int downR = 5;       //LED representing neg y axis
-const int rightR = 4;      //LED representing pos x axis
+const int upL = 7;         //LED representing pos y axis
+const int leftL = 6;       //LED representing neg x axis
+const int downL = 5;       //LED representing neg y axis
+const int rightL = 4;      //LED representing pos x axis
 
 
 //(To test) values of x and y:
-const int leftX = 492;
-const int leftY = 503;
-const int rightX = 492;
-const int rightY = 510;
+const double leftX = 507.0;
+const double leftY = 523.00;
+const double rightX = 507;
+const double rightY = 500;
 
 void setup() {
   pinMode(leftSW_pin, INPUT);
@@ -42,15 +43,16 @@ void setup() {
 }
 
 void loop() {
+  
   //Left Joystick
   int switchL = digitalRead(leftSW_pin);
-  int xaxL = (analogRead(leftX_pin) - (leftX))/5;
-  int yaxL = (analogRead(leftY_pin) - (rightX))/5;
+  double xaxL = (analogRead(leftX_pin) - (leftX))/5.0;
+  double yaxL = (analogRead(leftY_pin) - (rightX))/5.0;
   
   //Right Joystick
-  int switchR = digitalRead(rightSW_pin);
-  int xaxR = (analogRead(rightX_pin) - (leftY))/5;
-  int yaxR = (analogRead(rightY_pin) - (rightY))/5;
+  double switchR = digitalRead(rightSW_pin);
+  double xaxR = (analogRead(rightX_pin) - (leftY))/5.0;
+  double yaxR = (analogRead(rightY_pin) - (rightY))/5.0;
 
   //Cancelling negative Noise:
   if(xaxL < -100){
@@ -81,17 +83,17 @@ void loop() {
   }
 
   //Cancelling idle noise:
-  if(xaxL > 2 || xaxL < -2){
-    xaxL = 0;
+  if(xaxL < 5.0 && xaxL > -5.0){
+    xaxL = 0.0;
   }
-  if(xaxR > 2 || xaxR < -2){
-    xaxR = 0;
+  if(xaxR < 5.0 && xaxR > -5.0){
+    xaxR = 0.;
   }
-  if(yaxL > 2 || yaxL < -2){
+  if(yaxL < 5.0 && yaxL > -5.0){
     yaxL = 0;
   }
-  if(yaxR > 2 || yaxR < -2){
-    yaxR = 0;
+  if(yaxR < 5.0 && yaxR > -5.0){
+    yaxR = 0.0;
   }
 
   //Powering Up LEDs
@@ -137,7 +139,7 @@ void loop() {
     analogWrite(leftR, 255);
     analogWrite(rightR, 255);
   }
-  /*
+  
   //Serial Monitor printing (for debug/testing)
   Serial.print("Left Switch:  ");
   Serial.print(switchL);
@@ -159,6 +161,6 @@ void loop() {
   Serial.print("Right Y-axis: ");
   Serial.println(yaxR);
   Serial.print("\n\n");
-  */
+  
   delay(750);
 }
