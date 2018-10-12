@@ -6,7 +6,6 @@
  For representation: this outputs it to the serial monitor and to LEDs
  */
 
-bool returnToZero = true;
 // Arduino pin numbers
 // Left Analog Stick
 const int leftSW_pin = 2;  // digital pin connected to Left switch output //0 if pressed and 1 if not
