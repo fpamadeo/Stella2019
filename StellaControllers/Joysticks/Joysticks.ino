@@ -235,5 +235,5 @@ void loop() {
   Serial.print(powerD);
   Serial.print("\nPower U: ");
   Serial.print(powerU);
-  delay(750);
+  delay(500);
 }
