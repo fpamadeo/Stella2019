@@ -1,28 +1,28 @@
-					    ____               _           __ 						       
-					   / __ \_________    (_)__  _____/ /_						       
-					  / /_/ / ___/ __ \  / / _ \/ ___/ __/						       
-					 / ____/ /  / /_/ / / /  __/ /__/ /_  				        
-					/_/   /_/   \____/_/ /\___/\___/\__/  
-					       _____ __ /___/ ____            
-					      / ___// /____  / / /___ _       
-					      \__ \/ __/ _ \/ / / __ `/       
-					     ___/ / /_/  __/ / / /_/ /        
-					    /____/\__/\___/_/_/\__,_/         
-						___  ____ _______             
-					       |__ \/ __ <  / __ \            
-					       __/ / / / / / /_/ /            
-					      / __/ /_/ / /\__, /             
-					     /____|____/_//____/              
+				    ____               _           __ 						       
+				   / __ \_________    (_)__  _____/ /_						       
+				  / /_/ / ___/ __ \  / / _ \/ ___/ __/						       
+				 / ____/ /  / /_/ / / /  __/ /__/ /_  				        
+				/_/   /_/   \____/_/ /\___/\___/\__/  
+				       _____ __ /___/ ____            
+				      / ___// /____  / / /___ _       
+				      \__ \/ __/ _ \/ / / __ `/       
+				     ___/ / /_/  __/ / / /_/ /        
+				    /____/\__/\___/_/_/\__,_/         
+					___  ____ _______             
+				       |__ \/ __ <  / __ \            
+				       __/ / / / / / /_/ /            
+				      / __/ /_/ / /\__, /             
+				     /____|____/_//____/              
 
 
-#This is a git repository for Chicago EDT's Project Stella 2019
+### This is a git repository for Chicago EDT's Project Stella 2019
 _______________________________________________________________________________________________________________________________
-#This repository includes:
+### This repository includes:
 	* The controller's code, design and components
 	* The receiver and how it interacts with the controller, motor drivers/controllers, and other mechanisms
 	* Mechanisms' codes, design and components
 _______________________________________________________________________________________________________________________________
-#Contributors:
+### Contributors:
 	* Damien Gilbert
 	* Kaleb Vicary-Rzab
 	* Francis Paul Amadeo
@@ -36,7 +36,7 @@ ________________________________________________________________________________
 	* 
 	* 
 _______________________________________________________________________________________________________________________________
-#Guidelines:
+### Guidelines:
 
 * Always read this README
 
@@ -46,7 +46,7 @@ ________________________________________________________________________________
 
 * If used any libraries not included in vanilla Arduino IDE or referenced an already existing code, update the [sources.md](sources.md) file
 
-* If used/referenced any CAD file not built by a member of [Chicago EDT](https:chicagoedt.org), (i.e. via Thingiverse or GrabCAD) 
+* If used/referenced any CAD file not built by a member of [Chicago EDT](https://chicagoedt.org), (i.e. via Thingiverse or GrabCAD) 
  
 * If the [*This repository includes:*](README.md#This repository includes:) is outdated, please update it
 
