@@ -15,14 +15,14 @@
 					     /____|____/_//____/              
 
 
-### This is a git repository for Chicago EDT's Project Stella 2019
+## This is a git repository for Chicago EDT's Project Stella 2019
 _______________________________________________________________________________________________________________________________
-### This repository includes:
+## This repository includes:
 * The controller's code, design and components
 * The receiver and how it interacts with the controller, motor drivers/controllers, and other mechanisms
 * Mechanisms' codes, design and components
 _______________________________________________________________________________________________________________________________
-### Contributors:
+## Contributors:
 * Damien Gilbert
 * Kaleb Vicary-Rzab
 * Francis Paul Amadeo
@@ -36,7 +36,7 @@ ________________________________________________________________________________
 * 
 * 
 _______________________________________________________________________________________________________________________________
-### Guidelines:
+## Guidelines:
 
 * Always read this README
 
