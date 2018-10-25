@@ -1,7 +1,7 @@
-				    ____               _           __ 						       
-				   / __ \_________    (_)__  _____/ /_						       
-				  / /_/ / ___/ __ \  / / _ \/ ___/ __/						       
-				 / ____/ /  / /_/ / / /  __/ /__/ /_  				        
+				    ____               _           __ 
+				   / __ \_________    (_)__  _____/ /_
+				  / /_/ / ___/ __ \  / / _ \/ ___/ __/      
+				 / ____/ /  / /_/ / / /  __/ /__/ /_      
 				/_/   /_/   \____/_/ /\___/\___/\__/  
 				       _____ __ /___/ ____            
 				      / ___// /____  / / /___ _       
@@ -48,7 +48,7 @@ ________________________________________________________________________________
 
 * If used/referenced any CAD file not built by a member of [Chicago EDT](https://chicagoedt.org), (i.e. via Thingiverse or GrabCAD) 
  
-* If the [*This repository includes:*](README.md#This repository includes:) is outdated, please update it
+* If the [*This repository includes:*](README.md#this-repository-includes) is outdated, please update it
 
 * Data sheets should be added in the drive for everything we use on STELLA
 
