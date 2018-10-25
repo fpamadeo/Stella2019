@@ -27,7 +27,7 @@ ________________________________________________________________________________
 * Kaleb Vicary-Rzab
 * Francis Paul Amadeo
 * Toan Nguyen
-* 
+* Denisse Manzanilla Reyna
 * 
 * 
 * 
