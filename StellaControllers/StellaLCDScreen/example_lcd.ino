@@ -1,15 +1,19 @@
+//WILL NEED TO TEST WITH SERVOS AND STEPPERS AS IF THEY WERE ARM OR MOTOR!!! DO IT ASAP DOOD.
+//If anyone wants to mess with code and simplify it please do so! Thank you!
 #include <Servo.h>
+#include <Stepper.h>
 #include <LiquidCrystal.h>
 LiquidCrystal lcd(6, 7, 5, 4, 3, 2);
 
+// INITIAL VALUES
 int j = 0;
 int armLock = 0;
 int motorLock = 0;
 
 
 
-const int numOfScreens = 4;
-int currentScreen = 0;
+const int numOfScreens = 4; // total available of screens (subject to change)
+int currentScreen = 0; // sets what current screen should be; based on array values
 String screens[numOfScreens][2] = {{"Motor","Arm"},{"Leg","Head"},{"Arm","Unlocked"},{"Motor","Running"}}; //array of 0,1,2,3
 
 
@@ -134,21 +138,31 @@ void inputAction(int input) {
   
   else if (input == 2) {
     if (currentScreen == 0) {
-      if( j == 0){
+      if( j == 0){ // locks Motors while unlocking arm controllability
         lcd.clear();
-        currentScreen = 2;
-        armLock = 1; 
+        currentScreen = 2; // message arm SHOULD be able to be moved (add check?)
+        armLock = 1;
+        motorLock = 0; 
       }
-      if(j == 1){
+      if(j == 1){ // locks arm movement unlocks motors
         lcd.clear();
-        currentScreen = 3;
+        currentScreen = 3; // message motor SHOULD be running (add check?)
         motorLock = 1;
+        armLock = 0;
       }
   } 
 }
   
-  else if (input == 3) { // Restart??
-  
+  else if (input == 3) { // Restart; lock everything with reset or keep as is?
+  if(2 <= currentScreen <= 3){
+    j = 0;
+    currentScreen = 0;
+    lcd.clear();
+    lcd.setCursor(0,j);
+    lcd.print(">");
+    
+    
+  }
   }
 }
 
