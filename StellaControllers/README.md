@@ -19,7 +19,7 @@ D30 | DB0
 D23 | E 
 D25 | RS
 
-###2.2 Joystick/s:
+### 2.2 Joystick/s:
 Arduino | Joysticks 
 --- | --- 
 A0 | JS1 (X-Axis)
@@ -27,7 +27,7 @@ A1 | JS1 (Y-Axis)
 A2 | JS2 (X-Axis)
 A3 | JS2 (Y-Axis)
  
-###2.3 Transceiver:
+### 2.3 Transceiver:
 Arduino | Joysticks 
 --- | --- 
 A0 | JS1 (X-Axis)
