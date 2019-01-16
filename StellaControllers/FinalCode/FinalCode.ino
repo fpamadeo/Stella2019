@@ -1,5 +1,21 @@
-
+#include <SPI.h>  
+#include "RF24.h"
 #include <LiquidCrystal.h>
+
+//RF24:
+typedef struct package
+{
+  int   state = 0; //State of the selected option: 0 = OFF; 1 = ON; 2 = SINGLE SHOT 
+  int   key = 0; //"Hash key" of the selected option
+  double xAxis = 0.0; //yAxis value from the joysticks
+  double yAxis = 0.0; //xAxis value from the joysticks
+  bool  locked = true; //True until we want to lock
+} pkg; 
+byte addresses[][6] = {("0")};
+pkg toSend;
+RF24 controller (7,8);
+
+
 //Joysticks:
 // Left Analog Stick
 //const int leftSW_pin = 2; // digital pin connected to Left switch output //0 if pressed and 1 if not
@@ -53,12 +69,20 @@ void setup() {
   //For Testing #TODO# (Comment out after testing)
   Serial.begin(9600);
   
-  //Joysticks: //Joystick has no button
+  //Joysticks: //Joystick module has no button
   /*pinMode(leftSW_pin, INPUT);
   digitalWrite(leftSW_pin, HIGH);
   pinMode(rightSW_pin, INPUT);
   digitalWrite(rightSW_pin, HIGH);
   */
+
+  //RF24
+  controller.begin();
+  controller.setChannel(115);
+  controller.setPALevel(RF24_PA_MAX);
+  controller.setDataRate( RF24_250KBPS ) ; 
+  controller.openWritingPipe( addresses[0]);
+  delay(1000);
   
   //LCD Screen:
   lcd.clear();
@@ -268,8 +292,51 @@ void printScreen() {
 
 //CURRENT OPTION IS SELECTED:
 void checkCurr(){
-  if checkCurr(){
-    
+  if (selected){
+      switch(curr){
+        case 0: //Shooter
+          if(curr == 0){
+            curr = MENU_ITEMS;
+          }
+          else{
+            curr -= 1;
+          }
+          break;
+        case 1: //DOWN
+          if(curr == MENU_ITEMS - 1){
+            curr = 0;
+          }
+          else{
+            curr += 1;
+          }
+          break;
+        case 2: //SELECT
+          selected = true;
+          break;
+        case 3: //PREV
+          curr -= 3;
+          if(curr < 0){
+            curr += MENU_ITEMS;
+          }
+          break;
+        case 4:
+          curr += 3;
+          if(curr >= MENU_ITEMS){
+            curr -= MENU_ITEMS;
+          }
+          break;
+        case 5:
+          if(releaseFoam){
+            releaseFoam = false;
+          }
+          else{
+            releaseFoam = true;
+          }
+          break;
+        default:
+          //*TESTING*
+          Serial.print("\nERROR: SWITCH CASE in checkFlags()\n"); //Should not even get here
+    }
   }
 }
 
@@ -285,5 +352,7 @@ void loop() {
   if(selected){
     checkCurr();
   }
+  
+  controller.write(&toSend, sizeof(toSend));//Sending package to robot
   delay(500);
 }
