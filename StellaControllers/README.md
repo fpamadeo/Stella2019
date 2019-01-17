@@ -28,12 +28,14 @@ A2 | JS2 (X-Axis)
 A3 | JS2 (Y-Axis)
  
 ### 2.3 Transceiver:
-Arduino | Joysticks 
+Arduino | Transceiver 
 --- | --- 
-A0 | JS1 (X-Axis)
-A1 | JS1 (Y-Axis)
-A2 | JS2 (X-Axis)
-A3 | JS2 (Y-Axis)
+VCC | 3.3 V (**DON'T USE 5V**)
+CE | D7
+CS | D8
+SCK | D13
+MOSI | D11
+MISO | D12
 
 ### 2.4 Push Buttons (Std)/Tactile Buttons (Trigger)/Trigger Switch:
 Arduino | Switch/Button 
@@ -46,6 +48,15 @@ D42 | TB2 (Next/DOWNx3)
 D25 | TS1 (Shooter)
 _______________________________________________________________________________________________________________________________
 ## 3. Remote Pinouts:
+### 3.1 Transceiver:
+Arduino | Transceiver 
+--- | --- 
+VCC | 3.3 V (**DON'T USE 5V**)
+CE | D7
+CS | D8
+SCK | D13
+MOSI | D11
+MISO | D12
 _______________________________________________________________________________________________________________________________
 ## 4. Menu:
 1. Shooter (Lock/Unlock)
@@ -56,4 +67,9 @@ ________________________________________________________________________________
 6. Lock All
 7. Unlock All
 _______________________________________________________________________________________________________________________________
+## 5. Notes:
+* **LCD Screen/LiquidCrystal.h** seems to have a bug and print a weird character when *lcd.clear()* and *lcd.setCursor(int,int)* is called in *loop()* instead of doing what it should be. To work around this, we brute forced this and just printed a 20x4 screen each call to *printScreen()*.
+* **20x4 LCD Screen** prints in the order of: Line 1 -> Line 3 -> Line 2 -> Line 4 due to how the Hardware is made. 
+_______________________________________________________________________________________________________________________________
+
 If you have any questions, please contact Francis
