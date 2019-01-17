@@ -2,14 +2,19 @@
 #include "RF24.h"
 #include <LiquidCrystal.h>
 
+//LCD SCREEN:
+LiquidCrystal lcd(25, 23, 30, 31, 29, 27, 28, 26, 24, 22);
+#define MENU_ITEMS 7 //Shooter - Grabber - FoamBalls - ReleasePit - ReleaseFoam - LockAll - UnlockAll
+String menu[MENU_ITEMS] = {"Shooter", "Grabber", "Foam Balls", "Release Pit Balls", "Release 1 Foam Ball", "Lock All", "Unlock All"};
+
 //RF24:
 typedef struct package
 {
-  int   state = 0; //State of the selected option: 0 = OFF; 1 = ON; 2 = SINGLE SHOT 
+  int   state[3] = {0, 0, 0}; //State of the selected option: 0 = OFF; 1 = ON; 2 = SINGLE SHOT 
   int   key = 0; //"Hash key" of the selected option
   double xAxis = 0.0; //yAxis value from the joysticks
   double yAxis = 0.0; //xAxis value from the joysticks
-  bool  locked = true; //True until we want to lock
+  bool  locked[3] = {true, true, true}; //True until we want to unlock
 } pkg; 
 byte addresses[][6] = {("0")};
 pkg toSend;
@@ -52,11 +57,6 @@ int lastInputState[numOfInputs] = {LOW, LOW, LOW, LOW, LOW, LOW};
 bool inputFlags[numOfInputs] = {LOW, LOW, LOW, LOW, LOW, LOW};
 long lastDebounceTime[numOfInputs] = {0, 0, 0, 0, 0,0};
 long debounceDelay = 5;
-
-//LCD SCREEN:
-LiquidCrystal lcd(25, 23, 30, 31, 29, 27, 28, 26, 24, 22);
-#define MENU_ITEMS 7 //Shooter - Grabber - FoamBalls - ReleasePit - ReleaseFoam - LockAll - UnlockAll
-String menu[MENU_ITEMS] = {"Shooter", "Grabber", "Foam Balls", "Release Pit Balls", "Release 1 Foam Ball", "Lock All", "Unlock All"};
 
 //Other global variables:
 bool readJS = false; // True when grabber is unlocked
@@ -292,52 +292,52 @@ void printScreen() {
 
 //CURRENT OPTION IS SELECTED:
 void checkCurr(){
-  if (selected){
-      switch(curr){
-        case 0: //Shooter
-          if(curr == 0){
-            curr = MENU_ITEMS;
-          }
-          else{
-            curr -= 1;
-          }
-          break;
-        case 1: //DOWN
-          if(curr == MENU_ITEMS - 1){
-            curr = 0;
-          }
-          else{
-            curr += 1;
-          }
-          break;
-        case 2: //SELECT
-          selected = true;
-          break;
-        case 3: //PREV
-          curr -= 3;
-          if(curr < 0){
-            curr += MENU_ITEMS;
-          }
-          break;
-        case 4:
-          curr += 3;
-          if(curr >= MENU_ITEMS){
-            curr -= MENU_ITEMS;
-          }
-          break;
-        case 5:
-          if(releaseFoam){
-            releaseFoam = false;
-          }
-          else{
-            releaseFoam = true;
-          }
-          break;
-        default:
-          //*TESTING*
-          Serial.print("\nERROR: SWITCH CASE in checkFlags()\n"); //Should not even get here
+    switch(curr){
+      case 0: //Shooter
+        toSend.key = 0; //Hash Key
+        if (toSend.locked[0]){ //If locked,
+          toSend.locked[0] = false; //unlock it
+        }
+        else{ //If unlocked,
+          toSend.locked[0] = true; //lock it
+        }
+        break;
+      case 1: //DOWN
+        if(curr == MENU_ITEMS - 1){
+          curr = 0;
+        }
+        else{
+          curr += 1;
+        }
+        break;
+      case 2: //SELECT
+        selected = true;
+        break;
+      case 3: //PREV
+        curr -= 3;
+        if(curr < 0){
+          curr += MENU_ITEMS;
+        }
+        break;
+      case 4:
+        curr += 3;
+        if(curr >= MENU_ITEMS){
+          curr -= MENU_ITEMS;
+        }
+        break;
+      case 5:
+        if(releaseFoam){
+          releaseFoam = false;
+        }
+        else{
+          releaseFoam = true;
+        }
+        break;
+      default:
+        //*TESTING*
+        Serial.print("\nERROR: SWITCH CASE in checkFlags()\n"); //Should not even get here
+    
     }
-  }
 }
 
 //MAIN:
