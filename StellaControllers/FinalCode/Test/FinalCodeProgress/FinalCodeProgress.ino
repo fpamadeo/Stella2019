@@ -3,7 +3,7 @@
 #include <LiquidCrystal.h>
 
 //RF24:
-typedef struct package
+/*typedef struct package
 {
   int   state = 0; //State of the selected option: 0 = OFF; 1 = ON; 2 = SINGLE SHOT 
   int   key = 0; //"Hash key" of the selected option
@@ -14,7 +14,7 @@ typedef struct package
 byte addresses[][6] = {"0"};
 pkg toSend;
 RF24 controller (7,8);
-
+*/
 
 //Joysticks:
 // Left Analog Stick

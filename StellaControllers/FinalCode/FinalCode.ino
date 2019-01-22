@@ -2,6 +2,8 @@
 #include "RF24.h"
 #include <LiquidCrystal.h>
 
+#define MECHS 4 //Number of Mechanisms: 0 = Shooter, 1 = Grabber, 2 = Foam Balls, 3 = Pit Balls
+
 //LCD SCREEN:
 LiquidCrystal lcd(25, 23, 30, 31, 29, 27, 28, 26, 24, 22);
 #define MENU_ITEMS 7 //Shooter - Grabber - FoamBalls - ReleasePit - ReleaseFoam - LockAll - UnlockAll
@@ -10,11 +12,12 @@ String menu[MENU_ITEMS] = {"Shooter", "Grabber", "Foam Balls", "Release Pit Ball
 //RF24:
 typedef struct package
 {
-  int   state[3] = {0, 0, 0}; //State of the selected option: 0 = OFF; 1 = ON; 2 = SINGLE SHOT 
-  int   key = 0; //"Hash key" of the selected option
+  int   state[MECHS] = {0, 0, 0, 0}; //State of the selected option: 0 = OFF; 1 = ON; 2 = SINGLE SHOT 
+  int   key = 0; //"Hash key" of the selected option; 
+                 //KEYS: Shooter - Grabber - PitBalls - FoamBalls - All
   double xAxis = 0.0; //yAxis value from the joysticks
   double yAxis = 0.0; //xAxis value from the joysticks
-  bool  locked[3] = {true, true, true}; //True until we want to unlock
+  bool  locked[MECHS] = {true, true, true, true}; //True until we want to unlock
 } pkg; 
 byte addresses[][6] = {("0")};
 pkg toSend;
@@ -56,7 +59,7 @@ int inputState[numOfInputs];
 int lastInputState[numOfInputs] = {LOW, LOW, LOW, LOW, LOW, LOW};
 bool inputFlags[numOfInputs] = {LOW, LOW, LOW, LOW, LOW, LOW};
 long lastDebounceTime[numOfInputs] = {0, 0, 0, 0, 0,0};
-long debounceDelay = 5;
+long debounceDelay = 10;
 
 //Other global variables:
 bool readJS = false; // True when grabber is unlocked
@@ -302,37 +305,54 @@ void checkCurr(){
           toSend.locked[0] = true; //lock it
         }
         break;
-      case 1: //DOWN
-        if(curr == MENU_ITEMS - 1){
-          curr = 0;
+      case 1: //Grabber
+        toSend.key = 1; //Hash Key
+        if (toSend.locked[1]){ //If locked,
+          toSend.locked[1] = false; //unlock it
+          readJS = true; //Read the joysticks
         }
-        else{
-          curr += 1;
-        }
-        break;
-      case 2: //SELECT
-        selected = true;
-        break;
-      case 3: //PREV
-        curr -= 3;
-        if(curr < 0){
-          curr += MENU_ITEMS;
+        else{ //If unlocked,
+          toSend.locked[1] = true; //lock it
+          readJS = false; //Read the joysticks
         }
         break;
-      case 4:
-        curr += 3;
-        if(curr >= MENU_ITEMS){
-          curr -= MENU_ITEMS;
+      case 2: //Pit Balls
+        toSend.key = 2; //Hash Key
+        if (toSend.locked[2]){ //If locked,
+          toSend.locked[2] = false; //unlock it
+        }
+        else{ //If unlocked,
+          toSend.locked[2] = true; //lock it
         }
         break;
-      case 5:
-        if(releaseFoam){
-          releaseFoam = false;
-        }
-        else{
-          releaseFoam = true;
+      case 3: //Release Pit Balls
+        toSend.key = 2; //Hash Key
+        if (not toSend.locked[2]){ //If unlocked,
+          if (toSend.state[2] = 0){
+            toSend.state[2] = 1; //Open the gate
+          }
+          else{
+             toSend.state[2] = 0; //... or Close the gate
+          }
         }
         break;
+      case 4: // Release 1 foam ball
+        toSend.key = 3; //Hash Key
+        if (not toSend.locked[0]){ //If shooter is unlocked,
+          if (toSend.state[3] = 0){
+            toSend.state[3] = 2; //Release 1
+          }
+      case 5: //Lock all
+        toSend.locked[0] = true;
+        toSend.locked[1] = true;
+        toSend.locked[2] = true;
+        break;
+      case 6: //Unock all
+        toSend.locked[0] = false;
+        toSend.locked[1] = false;
+        toSend.locked[2] = false;
+        break;
+          
       default:
         //*TESTING*
         Serial.print("\nERROR: SWITCH CASE in checkFlags()\n"); //Should not even get here
