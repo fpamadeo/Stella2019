@@ -342,6 +342,8 @@ void checkCurr(){
           if (toSend.state[3] = 0){
             toSend.state[3] = 2; //Release 1
           }
+        }
+        break;
       case 5: //Lock all
         toSend.locked[0] = true;
         toSend.locked[1] = true;
