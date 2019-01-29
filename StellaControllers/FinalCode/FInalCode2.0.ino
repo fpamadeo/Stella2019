@@ -1,5 +1,3 @@
-//TESTED WITH SERVO NOT WITH STEPPER, RUNS PERFECT (IF BUGS FOUND NOTIFY PLEASE!)
-//If anyone wants to mess with code and simplify it please do so! Thank you!
 //BUTTONS WORK, RF INCLUDED, NEED TO ADD FUNCTIONS FOR TESTING WILL DO SOON, ALL VARIABLES SHOULD BE INCLUDED (at least joysticks)
 //Changes in printScreen, string for screen, Check current not added (plan to put that in InputAction, maybe)
 //POSSIBLE PROBLEM when adding CheckCurr, also with void print screen function from previous code. 
