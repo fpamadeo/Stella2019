@@ -6,8 +6,8 @@
 
 //LCD SCREEN:
 LiquidCrystal lcd(25, 23, 30, 31, 29, 27, 28, 26, 24, 22);
-#define MENU_ITEMS 7 //Shooter - Grabber - FoamBalls - ReleasePit - ReleaseFoam - LockAll - UnlockAll
-String menu[MENU_ITEMS] = {"Shooter", "Grabber", "Foam Balls", "Release Pit Balls", "Release 1 Foam Ball", "Lock All", "Unlock All"};
+#define MENU_ITEMS 8 //Shooter - Grabber - FoamBalls - ReleasePit - ReleaseOneFoam - ReleaseAllFoam - LockAll - UnlockAll
+String menu[MENU_ITEMS] = {"Shooter", "Grabber", "Foam Balls", "Release Pit Balls", "Release 1 Foam Ball", "Release Foam Balls", "Lock All", "Unlock All"};
 
 //RF24:
 typedef struct package

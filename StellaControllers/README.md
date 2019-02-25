@@ -1,5 +1,16 @@
 # Construction Guide:
 _______________________________________________________________________________________________________________________________
+## 0. Table of Contents:
+1 | [Microcontroller/s used](README.md#1-microcontrollers-used)
+2 | [Controller Pinouts](README.md#2-Controller-Pinouts)
+• 2.1 | [LCD Screen](README.md#21-LCD-Screen)
+• 2.2 | [Joystick/s](README.md#22-Joysticks)
+• 2.3 | [Transceiver](README.md#23-Transceiver)
+• 2.4 | [Push Buttons (Std)/Tactile Buttons (Trigger)/Trigger Switch](README.md#24-push-buttons-stdtactile-buttons-triggertrigger-switch)
+3 | [Remote Pinouts](README.md#2-Remote-Pinouts)
+• 3.1 | [Transceiver](README.md#31-Transceiver)
+4 | [Menu](README.md#4-Menu)
+_______________________________________________________________________________________________________________________________
 ## 1. Microcontroller/s used:
 * Arduino MEGA for the controller itself
 * Arduino UNO for the remote control on the robot
@@ -62,10 +73,13 @@ ________________________________________________________________________________
 1. Shooter (Lock/Unlock)
 2. Grabber (Lock/Unlock)
 3. Foam Balls (Lock/Unlock)
-4. Release Pit Balls
-5. Release 1 Foam Ball
-6. Lock All
-7. Unlock All
+4. Turn On Shooter
+5. Grab now
+6. Release Pit Balls
+7. Release 1 Foam Ball
+8. Release Foam Balls
+9. Lock All
+10. Unlock All
 _______________________________________________________________________________________________________________________________
 ## 5. Notes:
 * **LCD Screen/LiquidCrystal.h** seems to have a bug and print a weird character when *lcd.clear()* and *lcd.setCursor(int,int)* is called in *loop()* instead of doing what it should be. To work around this, we brute forced this and just printed a 20x4 screen each call to *printScreen()*.
