@@ -1,6 +1,8 @@
 # Construction Guide:
 _______________________________________________________________________________________________________________________________
 ## 0. Table of Contents:
+*STELLA* | *2019*
+----- | -----
 1 | [Microcontroller/s used](README.md#1-microcontrollers-used)
 2 | [Controller Pinouts](README.md#2-Controller-Pinouts)
 • 2.1 | [LCD Screen](README.md#21-LCD-Screen)
