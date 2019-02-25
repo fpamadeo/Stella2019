@@ -1,17 +1,18 @@
 # Construction Guide:
 _______________________________________________________________________________________________________________________________
-## 0. Table of Contents:
+## Table of Contents:
 *STELLA* | *2019*
 ----- | -----
 1 | [Microcontroller/s used](README.md#1-microcontrollers-used)
 2 | [Controller Pinouts](README.md#2-Controller-Pinouts)
-• 2.1 | [LCD Screen](README.md#21-LCD-Screen)
-• 2.2 | [Joystick/s](README.md#22-Joysticks)
-• 2.3 | [Transceiver](README.md#23-Transceiver)
-• 2.4 | [Push Buttons (Std)/Tactile Buttons (Trigger)/Trigger Switch](README.md#24-push-buttons-stdtactile-buttons-triggertrigger-switch)
+2.1 | [LCD Screen](README.md#21-LCD-Screen)
+2.2 | [Joystick/s](README.md#22-Joysticks)
+2.3 | [Transceiver](README.md#23-Transceiver)
+2.4 | [Push Buttons (Std)/Tactile Buttons (Trigger)/Trigger Switch](README.md#24-push-buttons-stdtactile-buttons-triggertrigger-switch)
 3 | [Remote Pinouts](README.md#2-Remote-Pinouts)
-• 3.1 | [Transceiver](README.md#31-Transceiver)
+3.1 | [Transceiver](README.md#31-Transceiver)
 4 | [Menu](README.md#4-Menu)
+5 | [Menu](README.md#5-Notes)
 _______________________________________________________________________________________________________________________________
 ## 1. Microcontroller/s used:
 * Arduino MEGA for the controller itself
