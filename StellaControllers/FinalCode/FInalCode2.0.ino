@@ -49,10 +49,23 @@ int j = 0;
 boolean selectFIRST = 0;
 
 
-const int numOfScreens = 4; // total available of screens (subject to change)
+//SCREEN
+//OUTPUTS WORDS
 int currentScreen = 0; // sets what current screen should be; based on array values
-String screens[numOfScreens][4] = {{"Shooter","Grabber","Foam Balls","Release Foam Balls"},{"Release 1 Foam Ball","Lock all","Unlock all"}}; //array of 0,1,2,3
+const int choiceLimit = 6;
+String screens[7] = {"Shooter","Grabber","Foam Balls","Release Foam Balls","Release 1 Foam Ball","Lock all","Unlock all"}; //array of 0~6
+String Locked[2] = {"Status(On)","Status(Off)"};
+int upScreen = 0; // top option "screen moves"
+int downScreen = 0; //bottom option "screen moves"
 
+//SCREEN BOOLEAN FOR FUNCTION CHECK STATUS
+boolean shoot = 0;
+boolean grab = 0;
+boolean foamBall = 0;
+boolean ReleaseAll = 0;
+boolean Release1 = 0;
+boolean lockAll = 0;
+boolean unlockAll = 0;
 
 // BUTTONS
 //Buttons:
@@ -206,86 +219,65 @@ void resolveInputFlags() {
 //BUTTON OPERATIONS
 void inputAction(int input) {
   if (input == 0) { // change arrow cursor "up"
-    if(currentScreen <= 1){ // Should ONLY work in array 0 to 1 as this is the menu!
+    if(currentScreen <= 6){ // Should ONLY work in array 0 to 1 as this is the menu!
       selectFIRST = 1;
-    if (j == 0) {
-      j = 3;
-      lcd.clear();
-      lcd.setCursor(0,j);
-      lcd.print(">");
-      if (currentScreen == 0) {
-          currentScreen = numOfScreens-3;
+   
+   
+      
+      if (currentScreen <= 0) {
+          currentScreen = choiceLimit;
       }
-          else if (currentScreen != 0){
+          else if (currentScreen > 0){
+            
             currentScreen--;
+            
           }
       
-    } else {
-      j--;
-      lcd.clear();
-      lcd.setCursor(0,j);
-      lcd.print(">");
-     
-    }
   }
 } 
   
   else if (input == 1) { // change arrow cursor "down"
-   if(currentScreen <= 1){ // should ONLY work in array 0 to 1 as those are the current menu options
+   if(currentScreen <= 6){ // should ONLY work in array 0 to 1 as those are the current menu options
     selectFIRST = 1;
-    if (j == 3) {
-      j = 0;
-      lcd.clear();
-      lcd.setCursor(0,j);
-      lcd.print(">");
-      if (currentScreen == numOfScreens-3) {
+    
+      
+      if (currentScreen >= choiceLimit) {
           currentScreen = 0;
-      }
-          else if(currentScreen != numOfScreens-3){
+                              }
+          else if(currentScreen < choiceLimit){
+           
             currentScreen++;
             
           }
-    } 
-    else {
-      j++;
-      lcd.clear();
-      lcd.setCursor(0,j);
-      lcd.print(">");
      
-     
-    }
+    
   }
 } 
   
   
-  else if (input == 2) {
+  else if (input == 2) { // DONT PUSH THIS YET 
     if (selectFIRST == 1){
-    if (currentScreen == 0) {
-      if( j == 0){ // locks Motors while unlocking arm controllability
-        lcd.clear();
-        currentScreen = 3; // message arm SHOULD be able to be moved (add check?)
-         
+    if (currentScreen == 0){
+      if(shoot == 0){
+        shoot = 1;
       }
-      if(j == 1){ // locks arm movement unlocks motors
-        lcd.clear();
-        currentScreen = 2; // message motor SHOULD be running (add check?)
+      if(shoot == 1){
+        shoot = 0;
+      }
+    }
         
       }
    } 
- }
-} 
+ 
   else if (input == 3) { // Restart; lock everything with reset or keep as is?
     if(selectFIRST == 1){
-  if(2 <= currentScreen <= 3){
-    j = 0;
+  
     currentScreen = 0;
-    lcd.clear();
-    lcd.setCursor(0,j);
-    lcd.print(">");
+  
     
   }  
   }
-  }
+  
 }
 
 
@@ -294,12 +286,25 @@ void inputAction(int input) {
 //PRINT
 void printScreen() {
   //lcd.clear();
+  lcd.clear();
+  lcd.setCursor(0,1);
+  lcd.print(">");
+  if(currentScreen-1 < 0){
+    upScreen = 6;
+  }
+  else {
+    upScreen = currentScreen -1;
+  }
   lcd.setCursor(1,0);
-  lcd.print(screens[currentScreen][0]);
+  lcd.print(screens[upScreen]);
   lcd.setCursor(1,1);
-  lcd.print(screens[currentScreen][1]);
+  lcd.print(screens[currentScreen]);
+  if (currentScreen + 1 > 6){
+    downScreen = 0;
+  }
+  else {
+    downScreen = currentScreen + 1;
+  }
   lcd.setCursor(1,2);
-  lcd.print(screens[currentScreen][2]);
-  lcd.setCursor(1,3);
-  lcd.print(screens[currentScreen][3]);
+  lcd.print(screens[downScreen]);
 }
