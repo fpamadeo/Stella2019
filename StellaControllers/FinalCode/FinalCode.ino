@@ -14,8 +14,8 @@ LiquidCrystal lcd(25, 23, 30, 31, 29, 27, 28, 26, 24, 22);
 String screens[MENU_ITEMS] = {"LOCK Shooter", "LOCK Grabber", "LOCK Foam Balls", "Turn on Shooter", "Grab now", "Release Pit Balls", "Release 1 Foam Ball", "Release Foam Balls", "Lock All", "Unlock All"};
 
 //RF24:
-  int   key = 0; //"Hash key" of the selected option; 
-                 //KEYS: Shooter - Grabber - PitBalls - FoamBalls - All
+int   key = 0; //"Hash key" of the selected option; 
+               //KEYS: Shooter - Grabber - PitBalls - FoamBalls - All
 
 byte addresses[][6] = {("0")};
 RF24 controller (7,8);
