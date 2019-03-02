@@ -287,8 +287,12 @@ void inputAction(int input) {
 void printScreen() {
   //lcd.clear();
   lcd.clear();
+
+  //CURSOR
   lcd.setCursor(0,1);
   lcd.print(">");
+
+  //1st line
   if(currentScreen-1 < 0){
     upScreen = 6;
   }
@@ -297,8 +301,12 @@ void printScreen() {
   }
   lcd.setCursor(1,0);
   lcd.print(screens[upScreen]);
+
+  //2nd line
   lcd.setCursor(1,1);
   lcd.print(screens[currentScreen]);
+  
+  //3rd line:
   if (currentScreen + 1 > 6){
     downScreen = 0;
   }
@@ -307,4 +315,9 @@ void printScreen() {
   }
   lcd.setCursor(1,2);
   lcd.print(screens[downScreen]);
+
+  //4th line
+  lcd.setCursor(0,3);
+  lcd.print("STATUS:");
+//  lcd.print(currentStat[currentScreen]);
 }

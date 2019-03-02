@@ -1,50 +1,28 @@
+#include <nRF24L01.h>
+#include <printf.h>
+#include <RF24.h>
+#include <RF24_config.h>
+
 #include <SPI.h>  
-#include "RF24.h"
 #include <LiquidCrystal.h>
 
 #define MECHS 4 //Number of Mechanisms: 0 = Shooter, 1 = Grabber, 2 = Foam Balls, 3 = Pit Balls
 
 //LCD SCREEN:
 LiquidCrystal lcd(25, 23, 30, 31, 29, 27, 28, 26, 24, 22);
-#define MENU_ITEMS 8 //Shooter - Grabber - FoamBalls - ReleasePit - ReleaseOneFoam - ReleaseAllFoam - LockAll - UnlockAll
-String menu[MENU_ITEMS] = {"Shooter", "Grabber", "Foam Balls", "Release Pit Balls", "Release 1 Foam Ball", "Release Foam Balls", "Lock All", "Unlock All"};
+#define MENU_ITEMS 10 //Shooter - Grabber - FoamBalls - ShooterOnOff - Grab -  ReleasePit - ReleaseOneFoam - ReleaseAllFoam - LockAll - UnlockAll
+String screens[MENU_ITEMS] = {"LOCK Shooter", "LOCK Grabber", "LOCK Foam Balls", "Turn on Shooter", "Grab now", "Release Pit Balls", "Release 1 Foam Ball", "Release Foam Balls", "Lock All", "Unlock All"};
 
 //RF24:
-typedef struct package
-{
-  int   state[MECHS] = {0, 0, 0, 0}; //State of the selected option: 0 = OFF; 1 = ON; 2 = SINGLE SHOT 
   int   key = 0; //"Hash key" of the selected option; 
                  //KEYS: Shooter - Grabber - PitBalls - FoamBalls - All
-  double xAxis = 0.0; //yAxis value from the joysticks
-  double yAxis = 0.0; //xAxis value from the joysticks
-  bool  locked[MECHS] = {true, true, true, true}; //True until we want to unlock
-} pkg; 
+
 byte addresses[][6] = {("0")};
-pkg toSend;
 RF24 controller (7,8);
 
 
 //Joysticks:
-// Left Analog Stick
-//const int leftSW_pin = 2; // digital pin connected to Left switch output //0 if pressed and 1 if not
-#define leftX_pin A2   // analog pin connected to Left X output //Left: 0; Mid:~492; Right:~1008
-#define leftY_pin A3   // analog pin connected to Left Y output //down: 0; Mid:~503; Up:~1006
-// Right Analog Stick
-//const int rightSW_pin = 3;// digital pin connected to Right switch output //0 if pressed and 1 if not
-#define rightX_pin A0  // analog pin connected to Right X output //Left: 0; Mid:~492; Right:~1010 
-#define rightY_pin A1  // analog pin connected to Right Y output //down: 0; Mid:~510; Up:~1019
-//Left values
-double leftLR = 0;   //value representing x axis
-double leftUD = 0;   //value representing y axis
-//right values
-double rightLR = 0;   //value representing x axis
-double rightUD = 0;   //value representing y axis
-
-//#TODO# values of x and y:
-#define leftX 507.0
-#define leftY 523.00
-#define rightX 507
-#define rightY 500
+//Unneeded as of now, copy from the previous versions if needed
 
 //Buttons:
 #define PB1 38 //UP
@@ -67,29 +45,35 @@ bool selected = false; // True when select is pressed
 bool releaseFoam = false; // True when TS1 is ACTIVE and we want rapidfire shooting
 int curr = 1; // current menu item 
 
+//Making User move cursor first before selecting options for neatness and consistancy
+boolean selectFIRST = 0;
+
+//SCREEN
+//OUTPUTS WORDS
+int currentScreen = 1; // sets what current screen should be; based on array values
+const int choiceLimit = 9;
+int upScreen = 0; // top option "screen moves"
+int downScreen = 0; //bottom option "screen moves"
+
+
 void setup() {  
   
-  //For Testing #TODO# (Comment out after testing)
-  Serial.begin(9600);
-  
-  //Joysticks: //Joystick module has no button
-  /*pinMode(leftSW_pin, INPUT);
-  digitalWrite(leftSW_pin, HIGH);
-  pinMode(rightSW_pin, INPUT);
-  digitalWrite(rightSW_pin, HIGH);
-  */
+//RF24
+controller.begin();
+controller.setChannel(115);
+controller.setPALevel(RF24_PA_MAX);
+controller.setDataRate( RF24_250KBPS ) ; 
+controller.openWritingPipe( addresses[0]);
+delay(1000);
 
-  //RF24
-  controller.begin();
-  controller.setChannel(115);
-  controller.setPALevel(RF24_PA_MAX);
-  controller.setDataRate( RF24_250KBPS ) ; 
-  controller.openWritingPipe( addresses[0]);
-  delay(1000);
-  
-  //LCD Screen:
-  lcd.clear();
-  lcd.begin(20,4);
+lcd.clear();
+
+  //Push Buttons/Tactile Switches
+  for (int i = 0; i < numOfInputs; i++) { // initialize inputs
+    pinMode(inputPins[i], INPUT);
+    digitalWrite(inputPins[i], HIGH);      // pull-up 20k
+  }
+  lcd.begin(20, 4); // lcd screen of 16 charc and 2 lines
   //Initial Screen:
   lcd.setCursor(1,0);
   lcd.print(".-.._.._..  .  .-.");
@@ -103,79 +87,24 @@ void setup() {
   lcd.setCursor(8,3);
   lcd.print("2019       ");
   Serial.println("       2019       ");
-  
-  //Push Buttons/Tactile Switches
-  for (int i = 0; i < numOfInputs; i++) { // initialize inputs
-    pinMode(inputPins[i], INPUT);
-    digitalWrite(inputPins[i], HIGH);      // pull-up 20k
-  }
-  
-  //TESTING: #TODO#
-  Serial.print("setup done\n");
-  delay(500);
-  printScreen();
-  lcd.setCursor(1,1);/*
-  lcd.write("STELLA 2019         ");
-  lcd.write("                    ");
-  lcd.write(">                   ");
-  lcd.write("                    ");
-  */
-  lcd.clear();
 }
 
-void joystick(){
-  //Left Joystick
-  leftLR = (analogRead(leftX_pin) - (leftX))/5.0;
-  leftUD = (analogRead(leftY_pin) - (rightX))/5.0;
+//MAIN:
+void loop() {
+  // put your main code here, to run repeatedly:
   
-  //Right Joystick
-  rightLR = (analogRead(rightX_pin) - (leftY))/5.0;
-  rightUD = (analogRead(rightY_pin) - (rightY))/5.0;
-
-  //Cancelling negative Noise:
-  if(leftLR < -100){
-    leftLR = -100;
-  }
-  if(rightLR < -100){
-    rightLR = -100;
-  }
-  if(leftUD < -100){
-    leftUD = -100;
-  }
-  if(rightUD < -100){
-    rightUD = -100;
-  }
-
-  //Canceling positive noise:
-  if(leftLR > 100){
-    leftLR = 100;
-  }
-  if(leftUD > 100){
-    leftUD = 100;
-  }
-  if(rightLR > 100){
-    rightLR = 100;
-  }
-  if(rightUD > 100){
-    rightUD = 100;
-  }
-
-  //Cancelling idle noise:
-  if(leftLR < 5.0 && leftLR > -5.0){
-    leftLR = 0.0;
-  }
-  if(leftUD < 5.0 && leftUD > -5.0){
-    leftUD = 0.0;
-  }
-  if(rightLR < 5.0 && rightLR > -5.0){
-    rightLR = 0.0;
-  }
-  if(rightUD < 5.0 && rightUD > -5.0){
-    rightUD = 0.0;
-  }
+  setInputFlags();
+  resolveInputFlags();
+  
+  controller.write(key, sizeof(key));//Sending package to robot
+  delay(10);
 }
 
-//SETTING UP INPUTS/BUTTONS FLAGS
+//Helper Functions:
+//Refer to prev JS comment
+//void joystick(){
+//}
+//SETTING UP INPUTS/BUTTONS
 void setInputFlags() { // checking for inputs of buttons
   for (int i = 0; i < numOfInputs; i++) {
     int reading = digitalRead(inputPins[i]);
@@ -192,107 +121,112 @@ void setInputFlags() { // checking for inputs of buttons
     }
     lastInputState[i] = reading;
   }
-  
-  //Serial.println("HERE AT SetInputFLAGS");
 }
 
-//CHECKS THE FLAGS SETUP BY THE PREV FUNCTION (Helper Function: inputAction(int*))
-void checkFlags(){
-  //Serial.println("HERE AT CHECKFLAGS");
+//CHECKING AND PRINTING
+void resolveInputFlags() {
   for (int i = 0; i < numOfInputs; i++) {
-    //Serial.print("HERE INSIDE CHECKFLAGS ");
-    //Serial.println(i);
     if (inputFlags[i] == HIGH) {
-      Serial.print("HERE INSIDE CHECKFLAGS = HIGH");
       inputAction(i); // flags for buttons, sets up buttons for use
-      Serial.println(curr);
+      Serial.println(currentScreen);
       inputFlags[i] = LOW;
       printScreen(); // last thing done
     }
   }
 }
 
-//Helper Function: look at the flags
+
+//BUTTON OPERATIONS
 void inputAction(int input) {
-  switch(input){
-    case 0: //UP
+  if (input == 0) { // change arrow cursor "up"
+    if(currentScreen <= 9){ // Should ONLY work in array 0 to 1 as this is the menu!
+      selectFIRST = 1;   
+        if (currentScreen <= 0) {
+            currentScreen = choiceLimit;
+        }
+            else if (currentScreen > 0){
+              currentScreen--;  
+            } 
+      }
+   } 
+  
+  else if (input == 1) { // change arrow cursor "down"
+   if(currentScreen <= 9){ // should ONLY work in array 0 to 1 as those are the current menu options
+    selectFIRST = 1;
+    
       
-      if(curr == 0){
-        curr = MENU_ITEMS;
+      if (currentScreen >= choiceLimit) {
+          currentScreen = 0;
+                              }
+          else if(currentScreen < choiceLimit){
+           
+            currentScreen++;
+            
+          }
+     
+    
+  }
+} 
+  
+  
+  else if (input == 2) { // DONT PUSH THIS YET 
+    if (selectFIRST == 1){
+      
       }
-      else{
-        curr -= 1;
-      }
-      break;
-    case 1: //DOWN
-      if(curr == MENU_ITEMS - 1){
-        curr = 0;
-      }
-      else{
-        curr += 1;
-      }
-      break;
-    case 2: //SELECT
-      selected = true;
-      break;
-    case 3: //PREV
-      curr -= 3;
-      if(curr < 0){
-        curr += MENU_ITEMS;
-      }
-      break;
-    case 4:
-      curr += 3;
-      if(curr >= MENU_ITEMS){
-        curr -= MENU_ITEMS;
-      }
-      break;
-    case 5:
-      if(releaseFoam){
-        releaseFoam = false;
-      }
-      else{
-        releaseFoam = true;
-      }
-      break;
-    default:
-      //*TESTING*
-      Serial.print("\nERROR: SWITCH CASE in checkFlags()\n"); //Should not even get here
+   } 
+ 
+  else if (input == 3) { // Restart; lock everything with reset or keep as is?
+    if(selectFIRST == 1){
+  
+    currentScreen = 0;
+  
+    
+  }  
   }
   
 }
 
-//Helper Function: Printing the screen on the LCD:
+
+//Printing the screen on the LCD:
 void printScreen() {
+  //lcd.clear();
   lcd.clear();
-  //Previous:
+
+  //CURSOR
   lcd.setCursor(0,1);
-  Serial.print("\n ");
-  if(curr ==0){
-    lcd.print(menu[MENU_ITEMS-1]);
-    Serial.println(menu[MENU_ITEMS-1]);
-  }
-  else{
-    lcd.print(menu[curr-1]);
-    Serial.println(menu[curr-1]);
-  }
-  lcd.setCursor(0,2);
   lcd.print(">");
-  Serial.print(">");
-  lcd.print(menu[curr]);
-  Serial.println(menu[curr]);
-  lcd.setCursor(0,3);
-  Serial.print(" ");
-  if(curr == MENU_ITEMS-1){
-    lcd.print(menu[0]);
-    Serial.println(menu[0]);
-  } 
-  else{
-    lcd.print(menu[curr+1]);
-    Serial.println(menu[curr+1]);
+
+  //1st line
+  if(currentScreen - 1 < 0){
+    upScreen = 9;
   }
+  else {
+    upScreen = currentScreen - 1;
+  }
+  lcd.setCursor(1,0);
+  lcd.print(screens[upScreen]);
+
+  //2nd line
+  lcd.setCursor(1,1);
+  lcd.print(screens[currentScreen]);
+  
+  //3rd line:
+  if (currentScreen + 1 > 9){
+    downScreen = 0;
+  }
+  else {
+    downScreen = currentScreen + 1;
+  }
+  lcd.setCursor(1,2);
+  lcd.print(screens[downScreen]);
+
+  //4th line
+  lcd.setCursor(0,3);
+  lcd.print("STATUS:");
+  //lcd.print(currentStat[currentScreen]);
 }
 
+/*
 //CURRENT OPTION IS SELECTED:
 void checkCurr(){
     switch(curr){
@@ -361,20 +295,4 @@ void checkCurr(){
     
     }
 }
-
-//MAIN:
-void loop() {
-  // put your main code here, to run repeatedly:
-  
-  setInputFlags();
-  if(readJS){
-    joystick();
-  }
-  checkFlags(); //And Print the screen
-  if(selected){
-    checkCurr();
-  }
-  
-  controller.write(&toSend, sizeof(toSend));//Sending package to robot
-  delay(500);
-}
+*/
