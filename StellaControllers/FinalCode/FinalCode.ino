@@ -44,7 +44,7 @@ bool readJS = false; // True when grabber is unlocked
 bool selected = false; // True when select is pressed
 bool releaseFoam = false; // True when TS1 is ACTIVE and we want rapidfire shooting
 int curr = 1; // current menu item 
-
+bool locked[MECHS] = {true, true, true, true};
 //Making User move cursor first before selecting options for neatness and consistancy
 boolean selectFIRST = 0;
 
@@ -226,67 +226,66 @@ void printScreen() {
   //lcd.print(currentStat[currentScreen]);
 }
 
-/*
+
 //CURRENT OPTION IS SELECTED:
 void checkCurr(){
     switch(curr){
       case 0: //Shooter
-        toSend.key = 0; //Hash Key
-        if (toSend.locked[0]){ //If locked,
-          toSend.locked[0] = false; //unlock it
+        if (locked[0]){ //If locked,
+          locked[0] = false; //unlock it
         }
         else{ //If unlocked,
-          toSend.locked[0] = true; //lock it
+          locked[0] = true; //lock it
         }
         break;
       case 1: //Grabber
-        toSend.key = 1; //Hash Key
-        if (toSend.locked[1]){ //If locked,
-          toSend.locked[1] = false; //unlock it
-          readJS = true; //Read the joysticks
+        if (locked[1]){ //If locked,
+          locked[1] = false; //unlock it
         }
         else{ //If unlocked,
-          toSend.locked[1] = true; //lock it
-          readJS = false; //Read the joysticks
+          locked[1] = true; //lock it
         }
         break;
       case 2: //Pit Balls
-        toSend.key = 2; //Hash Key
-        if (toSend.locked[2]){ //If locked,
-          toSend.locked[2] = false; //unlock it
+        if (locked[2]){ //If locked,
+          locked[2] = false; //unlock it
         }
         else{ //If unlocked,
-          toSend.locked[2] = true; //lock it
+          locked[2] = true; //lock it
         }
         break;
-      case 3: //Release Pit Balls
-        toSend.key = 2; //Hash Key
-        if (not toSend.locked[2]){ //If unlocked,
-          if (toSend.state[2] = 0){
-            toSend.state[2] = 1; //Open the gate
-          }
-          else{
-             toSend.state[2] = 0; //... or Close the gate
-          }
+      case 3: //Turn on shooter
+        if (not locked[0]){ //If unlocked,
+          key = 1;
         }
         break;
-      case 4: // Release 1 foam ball
-        toSend.key = 3; //Hash Key
-        if (not toSend.locked[0]){ //If shooter is unlocked,
-          if (toSend.state[3] = 0){
-            toSend.state[3] = 2; //Release 1
-          }
+      case 4: //Grab now
+        if (not locked[1]){ //If unlocked,
+          key = 2;
         }
         break;
-      case 5: //Lock all
-        toSend.locked[0] = true;
-        toSend.locked[1] = true;
-        toSend.locked[2] = true;
+      case 5: //Release pit balls
+        key = 3;
         break;
-      case 6: //Unock all
-        toSend.locked[0] = false;
-        toSend.locked[1] = false;
-        toSend.locked[2] = false;
+      case 6: //Release 1 foam ball
+        if (not locked[2]){ //If unlocked,
+          key = 4;
+        }
+        break;
+      case 7: //Release all foam balls
+        if (not locked[2]){ //If unlocked,
+          key = 5;
+        }
+        break;
+      case 8: //Lock all
+        locked[0] = true;
+        locked[1] = true;
+        locked[2] = true;
+        break;
+      case 9: //Unock all
+        locked[0] = false;
+        locked[1] = false;
+        locked[2] = false;
         break;
           
       default:
@@ -295,4 +294,3 @@ void checkCurr(){
     
     }
 }
-*/

@@ -12,7 +12,8 @@ ________________________________________________________________________________
 **3** | [Remote Pinouts](README.md#2-Remote-Pinouts)
 3.1 | [Transceiver](README.md#31-Transceiver)
 **4** | [Menu](README.md#4-Menu)
-**5** | [Notes](README.md#5-Notes)
+**5** | [*Keys*](README.md#5-Keys)
+**6** | [Notes](README.md#6-Notes)
 _______________________________________________________________________________________________________________________________
 ## 1. Microcontroller/s used:
 * Arduino MEGA for the controller itself
@@ -84,7 +85,14 @@ ________________________________________________________________________________
 9. Lock All
 10. Unlock All
 _______________________________________________________________________________________________________________________________
-## 5. Notes:
+## 5. Keys:
+1. Turn On Shooter
+2. Grab now
+3. Release Pit Balls
+4. Release 1 Foam Ball
+5. Release Foam Balls
+_______________________________________________________________________________________________________________________________
+## 6. Notes:
 * **LCD Screen/LiquidCrystal.h** seems to have a bug and print a weird character when *lcd.clear()* and *lcd.setCursor(int,int)* is called in *loop()* instead of doing what it should be. To work around this, we brute forced this and just printed a 20x4 screen each call to *printScreen()*.
 * **20x4 LCD Screen** prints in the order of: Line 1 -> Line 3 -> Line 2 -> Line 4 due to how the Hardware is made. 
 _______________________________________________________________________________________________________________________________
