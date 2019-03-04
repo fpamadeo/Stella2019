@@ -52,12 +52,21 @@ void loop()
         case 1:
           //Shooter
           //Notes: Only needs DC motor in 1 direction
-          
+          analogWrite(DC1PWM,2);
+          digitalWrite(DCin1,LOW);
+          digitalWrite(DC1in2,HIGH);
+          delay(20);
           break;
         case 2:
           //Grabber
           //Notes: DC motor to go in both linear directions
-          
+          analogWrite(DC1PWM,2);
+          digitalWrite(DC2in1,LOW);
+          digitalWrite(DC2in2,HIGH);
+          delay(1500);
+          digitalWrite(DC2in1,HIGH);
+          digitalWrite(DC2in2,LOW);
+          delay(1500);
           break;
         case 3:
           //Pit Balls
