@@ -96,7 +96,7 @@ void loop() {
   setInputFlags();
   resolveInputFlags();
   
-  controller.write(key, sizeof(key));//Sending package to robot
+  //controller.write(key, sizeof(key));//Sending package to robot
   delay(10);
 }
 
@@ -141,7 +141,7 @@ void inputAction(int input) {
   if (input == 0) { // change arrow cursor "up"
     if(currentScreen <= 9){ // Should ONLY work in array 0 to 1 as this is the menu!
       selectFIRST = 1;   
-        if (currentScreen <= 0) {
+        if (currentScreen < 0) {
             currentScreen = choiceLimit;
         }
             else if (currentScreen > 0){
@@ -155,7 +155,7 @@ void inputAction(int input) {
     selectFIRST = 1;
     
       
-      if (currentScreen >= choiceLimit) {
+      if (currentScreen > choiceLimit) {
           currentScreen = 0;
                               }
           else if(currentScreen < choiceLimit){
@@ -244,7 +244,7 @@ void printScreen() {
   //4th line
   lcd.setCursor(0,3);
   lcd.print("STATUS: ");
-  if (currentScreen = 0){
+  if (currentScreen == 0){
     if(locked[0] = false){
       lcd.print("unlocked");
      }
@@ -252,7 +252,7 @@ void printScreen() {
       lcd.print("locked");
      }
   }
-  else if (currentScreen = 1){
+  else if (currentScreen == 1){
     if(locked[1] = false){
       lcd.print("unlocked");
     }
@@ -260,7 +260,7 @@ void printScreen() {
         lcd.print("locked");
     }
    }
-   else if (currentScreen = 2){
+   else if (currentScreen == 2){
     if(locked[2] = false){
       lcd.print("unlocked");
     }
@@ -268,19 +268,19 @@ void printScreen() {
       lcd.print("locked");
     }
    }
-   else if(currentScreen = 3){
+   else if(currentScreen == 3){
     lcd.print("Loaded");
    }
-   else if(currentScreen = 4){
+   else if(currentScreen == 4){
     lcd.print("Ready");
    }
-   else if(currentScreen = 5){
+   else if(currentScreen == 5){
     lcd.print("Ready");
    }
-   else if(currentScreen = 6){
+   else if(currentScreen == 6){
     lcd.print("Ready");
    }
-   else if(currentScreen = 7){
+   else if(currentScreen == 7){
     lcd.print("Ready");
    }
    
