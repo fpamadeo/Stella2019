@@ -171,8 +171,29 @@ void inputAction(int input) {
   
   else if (input == 2) { // DONT PUSH THIS YET 
     if (selectFIRST == 1){
-      
+      lcd.setCursor(1,4);
+      if (currentScreen = 3){
+      lcd.print("Status: Firing");
+      delay(15); //whatever time shooter takes to load
       }
+      else if (currentScreen = 4){
+        lcd.print("Status: Swatting");
+        delay(8); //whatever time it takes to reset
+      }
+      else if (currentScreen = 5){
+        lcd.print("Opening Bomb Bay Doors");
+        delay(20); //whatever time it takes to reset
+      }
+      else if (currentScreen = 6){
+        lcd.print("Status: Releasing 1");
+        delay(10); //whatever time it takes to reset
+      }
+      else if (currentScreen = 7){
+        lcd.print("Status: Release foam balls");
+        delay(20); //whatever time it takes to reset
+      }
+      }
+      
    } 
  
   else if (input == 3) { // Restart; lock everything with reset or keep as is?
@@ -222,7 +243,49 @@ void printScreen() {
 
   //4th line
   lcd.setCursor(0,3);
-  lcd.print("STATUS:");
+  lcd.print("STATUS: ");
+  if (currentScreen = 0){
+    if(locked[0] = false){
+      lcd.print("unlocked");
+     }
+     else{
+      lcd.print("locked");
+     }
+  }
+  else if (currentScreen = 1){
+    if(locked[1] = false){
+      lcd.print("unlocked");
+    }
+      else{
+        lcd.print("locked");
+    }
+   }
+   else if (currentScreen = 2){
+    if(locked[2] = false){
+      lcd.print("unlocked");
+    }
+    else{
+      lcd.print("locked");
+    }
+   }
+   else if(currentScreen = 3){
+    lcd.print("Loaded");
+   }
+   else if(currentScreen = 4){
+    lcd.print("Ready");
+   }
+   else if(currentScreen = 5){
+    lcd.print("Ready");
+   }
+   else if(currentScreen = 6){
+    lcd.print("Ready");
+   }
+   else if(currentScreen = 7){
+    lcd.print("Ready");
+   }
+   
+  
+  
   //lcd.print(currentStat[currentScreen]);
 }
 
