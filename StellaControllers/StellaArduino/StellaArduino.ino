@@ -3,11 +3,19 @@
 #include <Servo.h>
 
 #define MECHS 4 //Number of Mechanisms: 0 = Shooter, 1 = Grabber, 2 = Foam Balls, 3 = Pit Balls
+//DC Motors
+#define DC1PWM 3
+#define DC1in1 5
+#define DC1in2 6
+#define DC2PWM 9
+#define DC2in1 10
+#define DC2in2 11
+
 //Servos
 Servo servo0;
-Servo servo1;
+//Servo servo1;
 int pos0=0;
-int pos1=0;
+//int pos1=0;
 
 //RF24:
 int key = 0;
@@ -41,41 +49,58 @@ void loop()
     {
       Stella.read(&key, sizeof(key) );
       switch(key){
-        case 0:
+        case 1:
           //Shooter
           //Notes: Only needs DC motor in 1 direction
           
           break;
-        case 1:
+        case 2:
           //Grabber
           //Notes: DC motor to go in both linear directions
           
           break;
-        case 2:
-          //Foam Balls
+        case 3:
+          //Pit Balls
           //Servo connected to pin 9
-          for (pos0=0; pos0<=90; pos0+=30){
+          for (pos0=0; pos0<=180; pos0+=45){
             servo0.write(pos0);
             delay(15);
           }
-          for (pos0=90; pos0>=0; pos0-=30){
+          for (pos0=180; pos0>=0; pos0-=45){
             servo0.write(pos0);
             delay(15);
           }
           break;
-        case 3:
-          //Pit Balls
+        case 4:
+          //One Foam balls
           //Servo connected to pin 10
-          for (pos1=0; pos1<=90; pos1+=30){
-            servo1.write(pos1);
-            delay(15);
-          }
-          for (pos1=90; pos1>=0; pos1-=30){
+          /*
+           for (pos1=0; pos1<=90; pos1+=30){
             servo1.write(pos1);
             delay(15);
           }
           
+          for (pos1=90; pos1>=0; pos1-=30){
+            servo1.write(pos1);
+            delay(15);
+          */
           break;
+        case 5:
+          //All Foam balls
+          //Servo connected to pin 10
+          /*
+           for (pos1=0; pos1<=90; pos1+=30){
+            servo1.write(pos1);
+            delay(15);
+          }
+          delay (5000);
+          for (pos1=90; pos1>=0; pos1-=30){
+            servo1.write(pos1);
+            delay(15);
+          }
+          */
+          break;
+          
         default:
           //No Default so just break
           break;
