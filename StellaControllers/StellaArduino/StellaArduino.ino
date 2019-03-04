@@ -6,11 +6,8 @@
 //RF24:
 typedef struct package
 {
-  int   state[MECHS] = {0, 0, 0, 0}; //State of the selected option: 0 = OFF; 1 = ON; 2 = SINGLE SHOT 
-  int   key = 0; //"Hash key" of the selected option; 
+   int   key = 0; //"Hash key" of the selected option; 
                  //KEYS: Shooter - Grabber - PitBalls - FoamBalls - All
-  double xAxis = 0.0; //yAxis value from the joysticks (Considering Change)
-  double yAxis = 0.0; //xAxis value from the joysticks (Considering Change)
   bool  locked[MECHS] = {true, true, true, true}; //True until we want to unlock
 } pkg; 
 byte addresses[][6] = {("0")};
@@ -57,17 +54,21 @@ void loop()
     Serial.print("\nY-AXIS = ");
     Serial.println(toReceive.yAxis);
     Serial.print("\n\n LOCKED: ");
-    if(toReceive.locked[0]){
+    if(toReceive.locked[0]){ //Shooter
       Serial.print("0 ");
+      
     }
-    if(toReceive.locked[1]){
+    if(toReceive.locked[1]){ //Grabber
       Serial.print("1 ");
+      
     }
-    if(toReceive.locked[2]){
+    if(toReceive.locked[2]){ //Foamballs
       Serial.print("2 ");
+      
     }
-    if(toReceive.locked[3]){
+    if(toReceive.locked[3]){ //Pitballs
       Serial.print("3 ");
+      
     }
   }
   else{
