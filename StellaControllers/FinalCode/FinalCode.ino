@@ -60,8 +60,8 @@ void setup() {
   
 //RF24
 radio.begin();
-//radio.setChannel(115);
-//radio.setDataRate( RF24_250KBPS ) ; 
+radio.setChannel(115);
+radio.setDataRate( RF24_250KBPS ) ; 
 radio.openWritingPipe(address);
 radio.setPALevel(RF24_PA_MIN);
 radio.stopListening();
@@ -354,6 +354,7 @@ void checkCurr(){
         break;
       case 10:
         radio.write(key, sizeof(key));//Sending package to robot
+        currentScreen = 1;
         break;
       default:
         //*TESTING*
