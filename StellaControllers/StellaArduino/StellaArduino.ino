@@ -55,7 +55,7 @@ void loop()
           analogWrite(DC1PWM,2);
           digitalWrite(DCin1,LOW);
           digitalWrite(DC1in2,HIGH);
-          delay(20);
+          delay(2000);
           break;
         case 2:
           //Grabber
