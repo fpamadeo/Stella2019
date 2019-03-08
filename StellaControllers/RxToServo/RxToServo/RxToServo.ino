@@ -19,28 +19,32 @@
 #include <Servo.h>
 
 //Servos
-Servo lr;
-Servo ud;
+Servo foam;
+Servo pit;
 
 //Channels
 int ch1; // Here's where we'll keep our channel values
-int ch2;
-int ch3;
 
 //Values
-int lrval; // The value for the "Left/Right" Servo
-int udval; // The value for the "Up/Down" Servo
+int pulseVal; //The Mapped values from the rudder
+int foamVal; // The value for the foam balls Servo
+int pitVal; // The value for the Pit Balls Servo
+#define threshold 30
 
 //Pinouts
+#define RUDDpin 5
+#define foamPin 10
+#define pitPin 11
 
 void setup() {
 Serial.begin(9600);
-pinMode(5, INPUT); // Set our input pins as such
-pinMode(6, INPUT);
-pinMode(7, INPUT);
+pinMode(RUDDpin, INPUT); // Set our input pins as such
 
-lr.attach(10); 
-ud.attach(11);
+foam.attach(foamPin); 
+pit.attach(pitPin);
+
+foam.write(0);
+pit.write(0);
 
 Serial.begin(9600); // Pour a bowl of Serial
 
@@ -49,15 +53,60 @@ Serial.begin(9600); // Pour a bowl of Serial
 void loop() {
 
   //Get pulse
-  ch1 = pulseIn(5, HIGH, 25000); // Read the pulse width of 
-  ch2 = pulseIn(6, HIGH, 25000); // each channel
-  ch3 = pulseIn(7, HIGH, 25000);
+  ch1 = pulseIn(RUDDpin, HIGH, 25000); // Read the pulse width of rudder
+  
+  Serial.print("\n\nch1: ");
+  Serial.print(ch1);
+  pulseVal = map(ch1, 1000, 2000, -179, 179); //will get a pulse between -180 and 180
+  Serial.print("\nMapped:");
+  Serial.print(pulseVal);
 
-Serial.print("ch1\n");
-Serial.print(ch1);
-lrval = map(ch1, 1000, 2000, 0, 179);
-//Put pulse thru servo
-lr.write(lrval);
-udval = map(ch3, 1000, 2000, 0, 179);
-ud.write(udval);
+  //pulse dissection:
+  if(pulseVal < (-1 * threshold)){
+    if (foamVal < 175) { // goes from 180 degrees to 0 degrees
+      foamVal += 25;
+      Serial.print("\nFoam Value increased to:");              // tell servo to go to position in variable 'pos'
+      Serial.print(foamVal);              // tell servo to go to position in variable 'pos'  
+    }
+    if (pitVal > 2) { // goes from 180 degrees to 0 degrees
+      pitVal -= 25;
+      Serial.print("\nPit Value decreased to:");              // tell servo to go to position in variable 'pos'
+      Serial.print(pitVal);              // tell servo to go to position in variable 'pos'  
+    }
+    Serial.print("\nFoam Value: ");
+    Serial.print(foamVal);
+  }
+  else if(pulseVal > threshold){
+    if (foamVal > 2) { // goes from 180 degrees to 0 degrees
+      foamVal -= 25;
+      Serial.print("\nFoam Value increased to:");              // tell servo to go to position in variable 'pos'
+      Serial.print(foamVal);              // tell servo to go to position in variable 'pos'  
+    }
+    if (pitVal < 175) { // goes from 180 degrees to 0 degrees
+      pitVal += 25;
+      Serial.print("\nPit Value decreased to:");              // tell servo to go to position in variable 'pos'
+      Serial.print(pitVal);              // tell servo to go to position in variable 'pos'  
+    }
+    if(pitVal >= 175){
+      pitVal = 175;
+    }
+    Serial.print("\nPit Value: ");
+    Serial.print(pitVal);
+  }
+  else{
+    if (foamVal > 2) { // goes from 180 degrees to 0 degrees
+      foamVal -= 25;
+      Serial.print("\nFoam Value decreased to:");              // tell servo to go to position in variable 'pos'
+      Serial.print(foamVal);              // tell servo to go to position in variable 'pos'  
+    }
+    if (pitVal > 2) { // goes from 180 degrees to 0 degrees
+      pitVal -= 25;
+      Serial.print("\nPit Value decreased to:");              // tell servo to go to position in variable 'pos'
+      Serial.print(pitVal);              // tell servo to go to position in variable 'pos'  
+    }
+  }
+  //Put pulses thru servos
+  foam.write(foamVal);
+  pit.write(pitVal);
+  delay(500);
 }
