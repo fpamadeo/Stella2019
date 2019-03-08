@@ -1,0 +1,8 @@
+The controller case design was intended to be laser cut from 1/8" acrylic!!!
+Make sure to request for that specific thickness at Makerspace.
+
+ALSO: The thickness of the controller itself will differ from each folder. 
+	For a 2-inch thick controller, cut the parts in the "2in" folder.
+	For a 3-inch thick controller, cut the parts in the "3in" folder.
+	
+"back face" and "front face" are universal for either controller thickness.
